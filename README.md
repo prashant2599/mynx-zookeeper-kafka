@@ -1,10 +1,11 @@
 <h1>Zookeeper-kafak-Task-Deployment</h1>
 
-<p>Before Deployment</p>
+<h2>Deployment-Instruction</h2>
 
 <ul>
-<li>First, Package the helm charts</li>
+<li>First create the helm chart</li>
+```bash
+helm create <chart_name>
+```
 </ul>
-
-<h2>Deployment-Instruction</h2>
 
