@@ -2,12 +2,9 @@
 
 <h2>Deployment-Instruction</h2>
 
-<ul>
-<li>First create the helm chart</li>
-</ul>
+### Step 1: Package the Helm Chart
+
 ```bash
-
-helm create <chart_name>
-
+helm package <chart_name>
 ```
 
