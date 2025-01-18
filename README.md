@@ -36,13 +36,16 @@ kafka-console-producer.sh --broker-list kafka-0:9092 --topic mynx-test-topic
 kafka-console-consumer.sh --bootstrap-server kafka-0.kafka.kafka.svc.cluster.local:9092 --topic mynx-test-topic --from-beginning
 ```
 
-### Now, Helm Commands for upgradinng, Installing and uninstalling the chart,
+##  Helm Commands for upgradinng, Installing and uninstalling the chart,
+
+### Step 7: Upgrading the helm chart
+
 
 ```bash
-
-# upgrading the helm chart
 helm upgrade --install <chart_name> <chart_name>.tgz 
+```
 
-# uninstalling the helm chart
+### Step 8: uninstalling the helm chart
+```bash
 helm uninstall <chart_name>
 ```
