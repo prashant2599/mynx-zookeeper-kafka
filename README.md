@@ -51,6 +51,7 @@ helm uninstall <chart_name>
 ```
 ## Verification Steps to Ensure Kafka and Zookeeper are Running
 
+### step 9: To Check Running pods
 ```bash
 # -n here for namespace with name
 kubectl get pods -n kafka
