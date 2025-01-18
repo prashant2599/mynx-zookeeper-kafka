@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-env-config
+  namespace: kafka
+data:
+  KAFKA_ADVERTISED_LISTENERS: "{{ .Values.data.kafka.KAFKA_ADVERTISED_LISTENERS }}"
+  KAFKA_AUTO_CREATE_TOPICS_ENABLE: "{{ .Values.data.kafka.KAFKA_AUTO_CREATE_TOPICS_ENABLE }}"
+  KAFKA_INTER_BROKER_LISTENER_NAME: "{{ .Values.data.kafka.KAFKA_INTER_BROKER_LISTENER_NAME }}"
+  KAFKA_LISTENERS: "{{ .Values.data.kafka.KAFKA_LISTENERS }}"
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "{{ .Values.data.kafka.KAFKA_LISTENER_SECURITY_PROTOCOL_MAP }}"
+  KAFKA_ZOOKEEPER_CONNECT: "{{ .Values.data.kafka.KAFKA_ZOOKEEPER_CONNECT }}"
+ 
+

@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   serviceName: "zookeeper"
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount.zookeeper }}
   selector:
     matchLabels:
       app: zookeeper
@@ -16,15 +16,20 @@ spec:
     spec:
       containers:
         - name: zookeeper
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.image.zookeeper.repository }}:{{ .Values.image.zookeeper.tag }}"
+          
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.service.zookeeper.port }}
           env:
             - name: ZOOKEEPER_CLIENT_PORT
-              value: "{{ .Values.env.ZOOKEEPER_CLIENT_PORT }}"
+              value: "{{ .Values.env.zookeeper.ZOOKEEPER_CLIENT_PORT }}"
             - name: ZOOKEEPER_TICK_TIME
-              value: "{{ .Values.env.ZOOKEEPER_TICK_TIME }}"
+              value: "{{ .Values.env.zookeeper.ZOOKEEPER_TICK_TIME }}"
+            - name: ZOOKEEPER_SERVERS
+              value: "1"
+            - name: ALLOW_ANONYMOUS_LOGIN
+              value: "yes"
+  
           volumeMounts:
             - name: zookeeper-storage
               mountPath: /var/lib/zookeeper/data
@@ -36,5 +41,5 @@ spec:
         storageClassName: {{ .Values.storageClass }}
         resources:
           requests:
-            storage: {{ .Values.resources.requests.storage }}
+            storage: {{ .Values.resources.zookeeper.requests.storage }}
 

@@ -1,21 +1,46 @@
-replicaCount: 3
+replicaCount:
+  zookeeper: 3
+  kafka: 3
+
 namespace: kafka
+
 image:
-  repository: zookeeper
-  tag: latest
-  pullPolicy: IfNotPresent
+  zookeeper:
+    repository: bitnami/zookeeper
+    tag: latest
+
+  kafka:
+    repository: bitnami/kafka
+    tag: latest    
 
 resources:
-  requests:
-    storage: 5Gi
+  zookeeper:
+    requests:
+      storage: 5Gi
+  kafka:
+    requests:
+      storage: 5Gi
 
 storageClass: gp2
 
 service:
-  type: ClusterIP
-  port: 2181
+  zookeeper:
+    type: ClusterIP
+    port: 2181
+  kafka: 
+    type: NodePort
+    port: 32000
 
 env:
-  ZOOKEEPER_CLIENT_PORT: 2181
-  ZOOKEEPER_TICK_TIME: 2000
+  zookeeper:
+    ZOOKEEPER_CLIENT_PORT: 2181
+    ZOOKEEPER_TICK_TIME: 2000
 
+data:
+  kafka:
+    KAFKA_ADVERTISED_LISTENERS: "INTERNAL://:29092,LISTENER_EXTERNAL://:9092"
+    KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+    KAFKA_LISTENERS: "INTERNAL://:29092,LISTENER_EXTERNAL://:9092"
+    KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,LISTENER_EXTERNAL:PLAINTEXT"
+    KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"

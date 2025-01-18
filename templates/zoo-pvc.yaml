@@ -2,11 +2,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: zookeeper-pvc
+  namespace: kafka
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: {{ .Values.storageClass }}
+  storageClassName: {{ .values.storageClass }}
   resources:
     requests:
-      storage: {{ .Values.resources.requests.storage }}
+      storage: 5Gi
 

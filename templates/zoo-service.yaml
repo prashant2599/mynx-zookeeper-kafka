@@ -4,10 +4,9 @@ metadata:
   name: zookeeper
   namespace: {{ .Values.namespace }}
 spec:
-  ports:
-    - port: {{ .Values.service.port }}
-      name: client
   clusterIP: None
+  ports:
+    - port: 2181
+      targetPort: 2181
   selector:
     app: zookeeper
-
