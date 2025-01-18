@@ -4,8 +4,11 @@
 
 <ul>
 <li>First create the helm chart</li>
+
 ```bash
+
 helm create <chart_name>
+
 ```
 </ul>
 
