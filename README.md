@@ -4,11 +4,10 @@
 
 <ul>
 <li>First create the helm chart</li>
-
+</ul>
 ```bash
 
 helm create <chart_name>
 
 ```
-</ul>
 
