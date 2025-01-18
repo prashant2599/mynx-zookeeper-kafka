@@ -39,9 +39,9 @@ kafka-console-consumer.sh --bootstrap-server kafka-0.kafka.kafka.svc.cluster.loc
 ### Now, Helm Commands for upgradinng, Installing and uninstalling the chart,
 
 '''bash
-# upgrading the helm chart
+#upgrading the helm chart
 helm upgrade --install <chart_name> <chart_name>.tgz 
 
-# uninstalling the helm chart
+#uninstalling the helm chart
 helm uninstall <chart_name>
 ```
