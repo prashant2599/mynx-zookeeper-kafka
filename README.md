@@ -21,3 +21,13 @@ helm install zookeeper-kafka zookeeper-kafka.tgz
 ```bash
 kubectl exec -it kafka-0 -n kafka -- /bin/bash
 ```
+### step 4: Now, Produca a message to a kafka-topic
+
+```bash
+kafka-console-producer.sh --broker-list kafka-0:9092 --topic test-topic
+```
+### Step 5: Once a prompt open and type the message
+```bash
+> Hello Mynx-Test
+> This is the Zookeeper-kafka-Task
+```
