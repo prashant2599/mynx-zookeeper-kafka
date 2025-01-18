@@ -5,9 +5,14 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   ports:
-    - port: 9092            
-      targetPort: 9092       
-      nodePort: {{ .Values.service.kafka.port }}        
+    - name: external
+      port: {{ .Values.service.kafka.port }}
+      targetPort: 9092
+
+    - name: internal
+      port: 29092
+      targetPort: 29092
+
   selector:
     app: kafka
-  type: {{ .Values.service.kafka.type }}     
+  type: {{ .Values.service.kafka.type }}
