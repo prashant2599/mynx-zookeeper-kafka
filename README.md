@@ -49,3 +49,9 @@ helm upgrade --install <chart_name> <chart_name>.tgz
 ```bash
 helm uninstall <chart_name>
 ```
+## Verification Steps to Ensure Kafka and Zookeeper are Running
+
+```bash
+# -n here for namespace with name
+kubectl get pods -n kafka
+```
