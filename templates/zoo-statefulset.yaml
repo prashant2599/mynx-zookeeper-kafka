@@ -25,8 +25,8 @@ spec:
               value: "{{ .Values.env.zookeeper.ZOOKEEPER_CLIENT_PORT }}"
             - name: ZOOKEEPER_TICK_TIME
               value: "{{ .Values.env.zookeeper.ZOOKEEPER_TICK_TIME }}"
-            - name: ZOOKEEPER_SERVERS
-              value: "1"
+            - name: ZOO_SERVERS
+              value: "zookeeper-0.zookeeper.{{ .Values.namespace}}.svc.local:2888:3888,zookeeper-1.zookeeper.{{ .Values.namespace}}.svc.local:2888:3888,zookeeper-2.zookeeper.{{ .Values.namespace}}.svc.local:2888:3888"
             - name: ALLOW_ANONYMOUS_LOGIN
               value: "yes"
   
