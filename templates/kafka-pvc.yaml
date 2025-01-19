@@ -6,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: {{ .values.storageClass }}
+  storageClassName: {{ .Values.storageClass }}
   resources:
     requests:
       storage: {{ .Values.resources.kafka.requests.storage }}
