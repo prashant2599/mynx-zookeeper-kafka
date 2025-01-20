@@ -6,6 +6,12 @@ spec:
   selector:
     app: kafka-cluster
   ports:
-    - port: 32000
+    - name: internal
+      port: {{ .Values.service.kafka.internalport }}
+      targetPort: {{ .Values.service.kafka.internalport }}  
+    - name: external
+      port: {{ .Values.service.kafka.port }}
       targetPort: {{ .Values.service.kafka.port }}
+      nodePort: {{ .Values.service.kafka.nodePort }}
   type: NodePort
+
