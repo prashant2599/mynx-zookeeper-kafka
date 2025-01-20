@@ -1,37 +1,39 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: kafka
-  namespace: {{ .Values.namespace }}
+  name: crs-kafka
 spec:
-  serviceName: "kafka"
-  replicas: {{ .Values.replicaCount.kafka }}
+  replicas: {{ .Values.replicaCount }}
+  serviceName: kafka-cluster
   selector:
     matchLabels:
-      app: kafka
+      app: kafka-cluster
   template:
     metadata:
       labels:
-        app: kafka
+        app: kafka-cluster
     spec:
+      hostname: kafka
       containers:
-        - name: kafka
-          image: "{{ .Values.image.kafka.repository }}:{{ .Values.image.kafka.tag }}"
-          ports:
-            - containerPort: 9092
-          envFrom:
-            - configMapRef:
-                name: kafka-env-config
-          volumeMounts:
-            - name: kafka-storage
-              mountPath: /var/lib/kafka/
-  
+      - name: kafka
+        image: "{{ .Values.image.kafka.repository }}:{{ .Values.image.kafka.tag }}"
+        securityContext:
+          runAsUser: 0
+        ports:
+        - containerPort: {{ .Values.service.kafka.port }}
+        env:
+        - name: KAFKA_CFG_ZOOKEEPER_CONNECT
+          value: "{{ .Values.env.kafka.data.KAFKA_CFG_ZOOKEEPER_CONNECT }}"
+        - name: ALLOW_PLAINTEXT_LISTENER
+          value: "{{ .Values.env.kafka.data.ALLOW_PLAINTEXT_LISTENER }}"
+        volumeMounts:
+        - name: kafka-data
+          mountPath: /bitnami/kafka/data
   volumeClaimTemplates:
-    - metadata:
-        name: kafka-storage
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: {{ .values.storageClass }}
-        resources:
-          requests:
-            storage: 5Gi
+  - metadata:
+      name: kafka-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.kafka.storage.size }}
