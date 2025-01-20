@@ -53,6 +53,5 @@ helm uninstall <chart_name>
 
 ### step 9: To Check Running pods
 ```bash
-# -n here for namespace with name
-kubectl get pods -n kafka
+kubectl get pods
 ```
