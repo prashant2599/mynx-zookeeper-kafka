@@ -21,11 +21,10 @@ spec:
           runAsUser: 0
         ports:
         - containerPort: {{ .Values.service.kafka.port }}
-        env:
-        - name: KAFKA_CFG_ZOOKEEPER_CONNECT
-          value: "{{ .Values.env.kafka.data.KAFKA_CFG_ZOOKEEPER_CONNECT }}"
-        - name: ALLOW_PLAINTEXT_LISTENER
-          value: "{{ .Values.env.kafka.data.ALLOW_PLAINTEXT_LISTENER }}"
+        - containerPort: {{ .Values.service.kafka.internalport }}
+        envFrom:
+        - configMapRef:
+            name: kafka-env-config
         volumeMounts:
         - name: kafka-data
           mountPath: /bitnami/kafka/data
