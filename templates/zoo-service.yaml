@@ -7,12 +7,12 @@ spec:
     app: zookeeper-cluster
   ports:
     - name: client
-      port: {{ .Values.zookeeper.ports.client }}
-      targetPort: {{ .Values.zookeeper.ports.client }}
+      port: {{ .Values.service.zookeeper.clientPort }}
+      targetPort: {{ .Values.service.zookeeper.clientPort }}
     - name: follower
-      port: {{ .Values.zookeeper.ports.follower }}
-      targetPort: {{ .Values.zookeeper.ports.follower }}
+      port: {{  .Values.service.zookeeper.followerPort }}
+      targetPort: {{  .Values.service.zookeeper.followerPort }}
     - name: leader
-      port: {{ .Values.zookeeper.ports.leader }}
-      targetPort: {{ .Values.zookeeper.ports.leader }}
+      port: {{  .Values.service.zookeeper.leaderPort }}
+      targetPort: {{  .Values.service.zookeeper.leaderPort }}
   clusterIP: None
