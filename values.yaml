@@ -1,28 +1,31 @@
-zookeeper:
-  replicas: 3
-  image: "bitnami/zookeeper:latest"
-  storage: "5Gi"
-  securityContext:
-    runAsUser: 0
-  environment:
-    ALLOW_ANONYMOUS_LOGIN: "yes"
-    ZOO_SERVERS: "crs-zookeeper-0.zookeeper-cluster.default.svc.cluster.local:2888:3888,crs-zookeeper-1.zookeeper-cluster.default.svc.cluster.local:2888:3888,crs-zookeeper-2.zookeeper-cluster.default.svc.cluster.local:2888:3888"
-  ports:
-    client: 2181
-    follower: 2888
-    leader: 3888
+replicaCount: 3
 
-kafka:
-  replicas: 3
-  image: "bitnami/kafka:2.6.0"
-  storage: "5Gi"
-  securityContext:
-    runAsUser: 0
-  resources:
-    memory: "1Gi"
-    cpu: "1"
-  environment:
-    KAFKA_CFG_ZOOKEEPER_CONNECT: "crs-zookeeper-0.zookeeper-cluster.default.svc.cluster.local:2181,crs-zookeeper-1.zookeeper-cluster.default.svc.cluster.local:2181,crs-zookeeper-2.zookeeper-cluster.default.svc.cluster.local:2181"
+image:
+  zookeeper:
+    repository: bitnami/zookeeper
+    tag: latest
+  kafka:
+    repository: bitnami/kafka
+    tag: latest
+
+service:
+  zookeeper:
+    clientPort: 2181
+    followerPort: 2888
+    leaderPort: 3888
+  kafka:
+    port: 9092
+
+volumeClaimTemplates:
+  zookeeper:
+    storage:
+      size: 5Gi
+  kafka:
+    storage:
+      size: 5Gi
+
+env:
+  kafka:
+   data:
+    KAFKA_CFG_ZOOKEEPER_CONNECT: crs-zookeeper-0.zookeeper-cluster.default.svc.cluster.local:2181,crs-zookeeper-1.zookeeper-cluster.default.svc.cluster.local:2181,crs-zookeeper-2.zookeeper-cluster.default.svc.cluster.local:2181
     ALLOW_PLAINTEXT_LISTENER: "yes"
-  ports:
-    client: 9092
