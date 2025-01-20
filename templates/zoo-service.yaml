@@ -1,12 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: zookeeper
-  namespace: {{ .Values.namespace }}
+  name: zookeeper-cluster
 spec:
-  clusterIP: None
-  ports:
-    - port: 2181
-      targetPort: 2181
   selector:
-    app: zookeeper
+    app: zookeeper-cluster
+  ports:
+    - name: client
+      port: {{ .Values.zookeeper.ports.client }}
+      targetPort: {{ .Values.zookeeper.ports.client }}
+    - name: follower
+      port: {{ .Values.zookeeper.ports.follower }}
+      targetPort: {{ .Values.zookeeper.ports.follower }}
+    - name: leader
+      port: {{ .Values.zookeeper.ports.leader }}
+      targetPort: {{ .Values.zookeeper.ports.leader }}
+  clusterIP: None
