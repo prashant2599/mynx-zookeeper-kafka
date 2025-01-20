@@ -1,45 +1,49 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: zookeeper
-  namespace: {{ .Values.namespace }}
+  name: crs-zookeeper
 spec:
-  serviceName: "zookeeper"
-  replicas: {{ .Values.replicaCount.zookeeper }}
+  replicas: {{ .Values.replicaCount }}
+  serviceName: zookeeper-cluster
   selector:
     matchLabels:
-      app: zookeeper
+      app: zookeeper-cluster
   template:
     metadata:
       labels:
-        app: zookeeper
+        component: zookeeper-cluster
+        app: zookeeper-cluster
     spec:
       containers:
-        - name: zookeeper
-          image: "{{ .Values.image.zookeeper.repository }}:{{ .Values.image.zookeeper.tag }}"
-          
-          ports:
-            - containerPort: {{ .Values.service.zookeeper.port }}
-          env:
-            - name: ZOOKEEPER_CLIENT_PORT
-              value: "{{ .Values.env.zookeeper.ZOOKEEPER_CLIENT_PORT }}"
-            - name: ZOOKEEPER_TICK_TIME
-              value: "{{ .Values.env.zookeeper.ZOOKEEPER_TICK_TIME }}"
-            - name: ZOO_SERVERS
-              value: "zookeeper-0.zookeeper.{{ .Values.namespace }}.svc.local:2888:3888,zookeeper-1.zookeeper.{{ .Values.namespace }}.svc.local:2888:3888,zookeeper-2.zookeeper.{{ .Values.namespace }}.svc.local:2888:3888"
-            - name: ALLOW_ANONYMOUS_LOGIN
-              value: "yes"
-  
-          volumeMounts:
-            - name: zookeeper-storage
-              mountPath: /var/lib/zookeeper/data
+      - name: zookeeper
+        image: "{{ .Values.image.zookeeper.repository }}:{{ .Values.image.zookeeper.tag }}"
+        securityContext:
+          runAsUser: 0
+        ports:
+        - containerPort: {{ .Values.service.zookeeper.clientPort }}
+        - containerPort: {{ .Values.service.zookeeper.followerPort }}
+        - containerPort: {{ .Values.service.zookeeper.leaderPort }}
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - "sh"
+                - "-c"
+                - >
+                  echo $(( $(cat /etc/hosts | grep zookeeper | awk '{print($3)}' | awk '{split($0,array,"-")} END{print array[3]}') + 1 )) > /bitnami/zookeeper/data/myid
+        env:
+        - name: ALLOW_ANONYMOUS_LOGIN
+          value: "yes"
+        - name: ZOO_SERVERS
+          value:  crs-zookeeper-0.zookeeper-cluster.default.svc.cluster.local:2888:3888,crs-zookeeper-1.zookeeper-cluster.default.svc.cluster.local:2888:3888,crs-zookeeper-2.zookeeper-cluster.default.svc.cluster.local:2888:3888
+        volumeMounts:
+        - name: zookeeper-data
+          mountPath: /bitnami/zookeeper/data
   volumeClaimTemplates:
-    - metadata:
-        name: zookeeper-storage
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: {{ .Values.storageClass }}
-        resources:
-          requests:
-            storage: {{ .Values.resources.zookeeper.requests.storage }}
-
+  - metadata:
+      name: zookeeper-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.zookeeper.storage.size }}
