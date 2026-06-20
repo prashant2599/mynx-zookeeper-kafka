@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       labels:
-        app: kafka-cluster
+        app: kafka-test
     spec:
       hostname: kafka
       containers:
